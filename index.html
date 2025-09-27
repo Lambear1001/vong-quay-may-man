@@ -3,99 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vòng quay Toán theo lớp</title>
+  <title>Vòng quay Câu hỏi Toán</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #74ebd5, #ACB6E5);
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #333;
+      margin: 0; padding: 0; text-align: center; color: #333;
     }
-
-    .step { display: none; margin-top: 50px; }
+    .step { display: none; margin-top: 40px; }
     .step.active { display: block; }
-
     button {
-      padding: 12px 25px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #ff4e50, #f9d423);
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      padding: 12px 25px; margin-top: 20px; border: none; border-radius: 10px;
+      background: linear-gradient(45deg, #ff4e50, #f9d423); color: white; font-size: 16px;
+      cursor: pointer; transition: 0.3s; box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-
-    .switch-bar {
-      display: flex;
-      justify-content: center;
-      background: #ccc;
-      padding: 10px;
-      margin-bottom: 20px;
-    }
-    .switch-bar button { margin: 0 10px; background: #666; }
-    .switch-bar button:hover { background: #444; }
-
-    .panel { display: none; }
-    .panel.active { display: block; }
-
-    .wheel-container {
-      position: relative;
-      width: 500px;
-      height: 500px;
-      margin: 0 auto;
-    }
-    canvas {
-      border-radius: 50%;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
+    button:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .wheel-container { position: relative; width: 500px; height: 500px; margin: 20px auto; }
+    canvas { border-radius: 50%; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
     .pointer {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
+      position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent;
       border-bottom: 40px solid red;
-      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.4));
     }
-
-    #resultText {
-      margin-top: 25px;
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #222;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-      padding: 10px 20px;
-    }
-
-    #studentList { margin-top: 15px; }
-    #studentList span {
-      display: inline-block;
-      margin: 5px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    #studentList span.chosen {
-      background: #ff4e50;
-      color: white;
-      text-decoration: line-through;
-    }
+    #resultText { margin-top: 25px; font-size: 1.2em; font-weight: bold; color: #222; }
   </style>
 </head>
 <body>
-  <!-- Bước 1: Chọn lớp -->
+  <!-- Bước 1 -->
   <div id="step1" class="step active">
     <h2>Bạn đang học lớp mấy?</h2>
     <select id="classSelect">
@@ -105,119 +39,21 @@
       <option value="8">Lớp 8</option>
     </select>
     <br>
-    <button onclick="nextStep(2)">Tiếp tục</button>
+    <button onclick="startWheel()">Bắt đầu</button>
   </div>
 
-  <!-- Bước 2: Nhập số học sinh -->
+  <!-- Bước 2 -->
   <div id="step2" class="step">
-    <h2>Có bao nhiêu học sinh?</h2>
-    <input type="number" id="studentCount" placeholder="Nhập số học sinh">
-    <br>
-    <button onclick="generateStudents()">Tiếp tục</button>
-  </div>
-
-  <!-- Bước 3: Giao diện chính -->
-  <div id="step3" class="step">
-    <div class="switch-bar">
-      <button onclick="showPanel('student')">Chọn học sinh</button>
-      <button onclick="showPanel('wheel')">Câu hỏi Toán</button>
+    <h2>Vòng quay câu hỏi Toán lớp <span id="classTitle"></span></h2>
+    <div class="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" width="500" height="500"></canvas>
     </div>
-
-    <!-- Panel chọn học sinh -->
-    <div id="studentPanel" class="panel active">
-      <h2 id="studentResult">Nhấn nút để chọn học sinh</h2>
-      <button onclick="pickStudent()">Chọn học sinh</button>
-      <div id="studentList"></div>
-    </div>
-
-    <!-- Panel vòng quay -->
-    <div id="wheelPanel" class="panel">
-      <div class="wheel-container">
-        <div class="pointer"></div>
-        <canvas id="wheelCanvas" width="500" height="500"></canvas>
-      </div>
-      <button id="spinBtn">Quay ngay!</button>
-      <p id="resultText"></p>
-    </div>
+    <button id="spinBtn">Quay ngay!</button>
+    <p id="resultText"></p>
   </div>
 
   <script>
-    let currentStep = 1;
-    let totalStudents = 0;
-    let students = [];
-    let currentClass = null;
-
-    function nextStep(step) {
-      document.getElementById(`step${currentStep}`).classList.remove("active");
-      currentStep = step;
-      document.getElementById(`step${currentStep}`).classList.add("active");
-
-      if (step === 2) {
-        currentClass = document.getElementById("classSelect").value;
-        if (!currentClass) {
-          alert("Hãy chọn lớp trước!");
-          currentStep = 1;
-          document.getElementById("step1").classList.add("active");
-        }
-      }
-    }
-
-    function generateStudents() {
-      totalStudents = parseInt(document.getElementById("studentCount").value);
-      if (!totalStudents || totalStudents <= 0) {
-        alert("Hãy nhập số học sinh hợp lệ!");
-        return;
-      }
-      students = [];
-      for (let i = 1; i <= totalStudents; i++) {
-        students.push(i);
-      }
-      renderStudentList();
-      nextStep(3);
-    }
-
-    function renderStudentList() {
-      let html = "";
-      for (let i = 1; i <= totalStudents; i++) {
-        let chosen = students.includes(i) ? "" : "chosen";
-        html += `<span class="${chosen}">${i}</span>`;
-      }
-      document.getElementById("studentList").innerHTML = html;
-    }
-
-    function showPanel(panel) {
-      document.getElementById("studentPanel").classList.remove("active");
-      document.getElementById("wheelPanel").classList.remove("active");
-      document.getElementById(panel + "Panel").classList.add("active");
-    }
-
-    function pickStudent() {
-      if (students.length === 0) {
-        document.getElementById("studentResult").innerText = "🎉 Đã chọn hết học sinh!";
-        return;
-      }
-      let index = Math.floor(Math.random() * students.length);
-      let student = students.splice(index, 1)[0];
-      document.getElementById("studentResult").innerText = `🎯 Học sinh số: ${student}`;
-      renderStudentList();
-    }
-
-    // ================== VÒNG QUAY TOÁN ==================
-    const canvas = document.getElementById("wheelCanvas");
-    const ctx = canvas.getContext("2d");
-    const spinBtn = document.getElementById("spinBtn");
-    const resultText = document.getElementById("resultText");
-
-    const segments = ["Toán"]; 
-    const colors = ["#FF6B6B"];
-
-    let startAngle = 0;
-    let arc = Math.PI * 2 / segments.length;
-    let spinAngle = 0;
-    let spinTime = 0;
-    let spinTimeTotal = 0;
-    let spinning = false;
-
     const mathQuestions = {
       "6": [
         "Viết số tự nhiên nhỏ nhất có ba chữ số khác nhau.",
@@ -257,31 +93,59 @@
       ]
     };
 
+    let currentClass = null;
+    let segments = [];
+    let colors = [];
+    let startAngle = 0;
+    let arc = 0;
+    let spinAngle = 0;
+    let spinTime = 0;
+    let spinTimeTotal = 0;
+    let spinning = false;
+
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const resultText = document.getElementById("resultText");
+
+    function startWheel() {
+      currentClass = document.getElementById("classSelect").value;
+      if (!currentClass) { alert("Hãy chọn lớp!"); return; }
+      document.getElementById("step1").classList.remove("active");
+      document.getElementById("step2").classList.add("active");
+      document.getElementById("classTitle").innerText = currentClass;
+      segments = mathQuestions[currentClass];
+      colors = segments.map((_, i) => i % 2 === 0 ? "#FF6B6B" : "#4D96FF");
+      arc = Math.PI * 2 / segments.length;
+      drawWheel();
+    }
+
     function drawWheel() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = colors[0];
-      ctx.beginPath();
-      ctx.moveTo(250, 250);
-      ctx.arc(250, 250, 250, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.save();
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 24px Segoe UI";
-      ctx.translate(250, 250);
-      ctx.fillText("TOÁN", -ctx.measureText("TOÁN").width / 2, 10);
-      ctx.restore();
+      for (let i = 0; i < segments.length; i++) {
+        let angle = startAngle + i * arc;
+        ctx.fillStyle = colors[i];
+        ctx.beginPath();
+        ctx.moveTo(250, 250);
+        ctx.arc(250, 250, 250, angle, angle + arc);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.save();
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 14px Segoe UI";
+        ctx.translate(250 + Math.cos(angle + arc / 2) * 150, 250 + Math.sin(angle + arc / 2) * 150);
+        ctx.rotate(angle + arc / 2 + Math.PI / 2);
+        let text = segments[i];
+        ctx.fillText(text.length > 30 ? text.slice(0,30)+"..." : text, -ctx.measureText(text).width / 2, 0);
+        ctx.restore();
+      }
     }
 
     function rotateWheel() {
       spinTime += 20;
-      if (spinTime >= spinTimeTotal) {
-        stopRotateWheel();
-        return;
-      }
+      if (spinTime >= spinTimeTotal) { stopRotateWheel(); return; }
       let spinAngleChange = easeOut(spinTime, 0, spinAngle, spinTimeTotal);
       startAngle += (spinAngleChange * Math.PI / 180);
       drawWheel();
@@ -289,25 +153,15 @@
     }
 
     function stopRotateWheel() {
-      if (!currentClass) {
-        resultText.textContent = "⚠️ Bạn chưa chọn lớp!";
-        spinning = false;
-        return;
-      }
-      let questions = mathQuestions[currentClass];
-      if (questions.length === 0) {
-        resultText.textContent = "🎉 Hết câu hỏi Toán lớp " + currentClass;
-      } else {
-        let index = Math.floor(Math.random() * questions.length);
-        let q = questions.splice(index, 1)[0]; // lấy và xoá để không lặp
-        resultText.innerHTML = `📘 Câu hỏi Toán lớp ${currentClass}: <br><b>${q}</b>`;
-      }
+      let degrees = startAngle * 180 / Math.PI + 90;
+      let arcd = 360 / segments.length;
+      let index = Math.floor((360 - (degrees % 360)) / arcd) % segments.length;
+      resultText.innerHTML = "📘 " + segments[index];
       spinning = false;
     }
 
     function easeOut(t, b, c, d) {
-      let ts = (t/=d)*t;
-      let tc = ts*t;
+      let ts = (t/=d)*t; let tc = ts*t;
       return b+c*(tc + -3*ts + 3*t);
     }
 
@@ -321,9 +175,7 @@
       rotateWheel();
     }
 
-    if (spinBtn) spinBtn.addEventListener("click", spinWheel);
-    drawWheel();
+    document.getElementById("spinBtn").addEventListener("click", spinWheel);
   </script>
 </body>
 </html>
-
