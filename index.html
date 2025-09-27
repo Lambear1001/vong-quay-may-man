@@ -110,8 +110,10 @@
     function startWheel() {
       currentClass = document.getElementById("classSelect").value;
       if (!currentClass) { alert("Hãy chọn lớp!"); return; }
+      
       document.getElementById("step1").classList.remove("active");
       document.getElementById("step2").classList.add("active");
+      
       document.getElementById("classTitle").innerText = currentClass;
       segments = mathQuestions[currentClass];
       colors = segments.map((_, i) => i % 2 === 0 ? "#FF6B6B" : "#4D96FF");
