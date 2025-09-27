@@ -34,16 +34,28 @@
     .wheel-container { position: relative; width: 500px; height: 500px; margin: 20px auto; }
     canvas { border-radius: 50%; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
     .pointer {
-      position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-      width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent;
-      border-top: 40px solid red;
+      position: absolute;
+      top: -20px; /* ở trên vòng quay */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 40px solid red; /* ▲ chỉa vào trong vòng */
     }
     #resultText { margin-top: 25px; font-size: 1.2em; font-weight: bold; color: #222; padding: 0 15px; }
   </style>
 </head>
 <body>
-  <!-- Bước 1 -->
-  <div id="step1" class="step active">
+  <!-- Step 0: Home -->
+  <div id="step0" class="step active">
+    <h1>🎉 Chào mừng đến với Vòng quay Toán 🎉</h1>
+    <p>Chọn học sinh ngẫu nhiên & Trả lời câu hỏi Toán thú vị!</p>
+    <button onclick="nextStep(1)">Bắt đầu</button>
+  </div>
+
+  <!-- Step 1: Chọn lớp -->
+  <div id="step1" class="step">
     <h2>Bạn đang học lớp mấy?</h2>
     <select id="classSelect">
       <option value="">--Chọn lớp--</option>
@@ -52,10 +64,11 @@
       <option value="8">Lớp 8</option>
     </select>
     <br>
+    <button onclick="prevStep()">⬅ Quay lại</button>
     <button onclick="nextStep(2)">Tiếp tục</button>
   </div>
 
-  <!-- Bước 2 -->
+  <!-- Step 2: Nhập số học sinh -->
   <div id="step2" class="step">
     <h2>Có bao nhiêu học sinh?</h2>
     <input type="number" id="studentCount" placeholder="Nhập số học sinh">
@@ -64,7 +77,7 @@
     <button onclick="generateStudents()">Tiếp tục</button>
   </div>
 
-  <!-- Bước 3 -->
+  <!-- Step 3: Giao diện chính -->
   <div id="step3" class="step">
     <div class="switch-bar">
       <button onclick="showPanel('student')">Chọn học sinh</button>
@@ -99,7 +112,7 @@
       "8": ["Tính giá trị của biểu thức: (x+3)(x-3).","Rút gọn phân thức: (x^2-9)/(x+3).","Cho phương trình 2x + 5 = 0. Tìm nghiệm.","Một hình thang có đáy lớn 12 cm, đáy nhỏ 8 cm, chiều cao 5 cm. Diện tích bằng bao nhiêu?","Tìm nghiệm của hệ phương trình: x+y=7, x-y=1.","Tính chu vi hình tròn có bán kính 7 cm. (Lấy π = 3,14).","Rút gọn biểu thức: (x^2-4)/(x-2).","Cho góc ở tâm bằng 60°. Số đo cung tròn chắn góc đó là bao nhiêu độ?","Một vật thể có thể tích hình lập phương cạnh 4 cm là bao nhiêu?","Tìm x: x/5 = 12/15."]
     };
 
-    let currentStep = 1;
+    let currentStep = 0;
     let totalStudents = 0;
     let students = [];
     let currentClass = null;
@@ -127,7 +140,7 @@
 
     function prevStep() {
       document.getElementById(`step${currentStep}`).classList.remove("active");
-      currentStep = currentStep > 1 ? currentStep - 1 : 1;
+      currentStep = currentStep > 0 ? currentStep - 1 : 0;
       document.getElementById(`step${currentStep}`).classList.add("active");
     }
 
