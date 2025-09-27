@@ -13,7 +13,7 @@
     .step { display: none; margin-top: 40px; }
     .step.active { display: block; }
     button {
-      padding: 12px 25px; margin-top: 20px; border: none; border-radius: 10px;
+      padding: 12px 25px; margin: 10px; border: none; border-radius: 10px;
       background: linear-gradient(45deg, #ff4e50, #f9d423); color: white; font-size: 16px;
       cursor: pointer; transition: 0.3s; box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
@@ -60,6 +60,7 @@
     <h2>Có bao nhiêu học sinh?</h2>
     <input type="number" id="studentCount" placeholder="Nhập số học sinh">
     <br>
+    <button onclick="prevStep()">⬅ Quay lại</button>
     <button onclick="generateStudents()">Tiếp tục</button>
   </div>
 
@@ -87,58 +88,23 @@
       <button id="spinBtn">Quay ngay!</button>
       <p id="resultText"></p>
     </div>
+
+    <button onclick="prevStep()">⬅ Quay lại</button>
   </div>
 
   <script>
     const mathQuestions = {
-      "6": [
-        "Viết số tự nhiên nhỏ nhất có ba chữ số khác nhau.",
-        "Phân số nào lớn hơn: 3/5 hay 4/7?",
-        "Tính giá trị của 36 : 9 + 25.",
-        "Một hình chữ nhật có chiều dài 12 cm, chiều rộng 8 cm. Chu vi bằng bao nhiêu?",
-        "Viết số thập phân bằng phân số 7/10.",
-        "Trong các số 45, 60, 75 số nào chia hết cho 9?",
-        "Một hình vuông có cạnh 5 cm. Diện tích bằng bao nhiêu?",
-        "Viết hỗn số 3 2/5 dưới dạng phân số.",
-        "Trên tia số, điểm nào biểu diễn số 2/3?",
-        "Viết ba số nguyên liên tiếp."
-      ],
-      "7": [
-        "Giá trị của 2x + 5 khi x = -3 là bao nhiêu?",
-        "Tìm nghiệm của phương trình: 3x - 7 = 5.",
-        "Một tam giác có các góc 40°, 60°. Góc còn lại bằng bao nhiêu?",
-        "Vẽ đồ thị hàm số y = 2x.",
-        "Phân tích đa thức x^2 + 5x thành nhân tử.",
-        "So sánh hai phân số 5/8 và 7/12.",
-        "Một hình bình hành có đáy 10 cm, chiều cao 6 cm. Diện tích bằng bao nhiêu?",
-        "Tìm x: 2(x-3) = 10.",
-        "Cho tỉ lệ thức 3/x = 9/12. Tìm x.",
-        "Số đối của số -15 là bao nhiêu?"
-      ],
-      "8": [
-        "Tính giá trị của biểu thức: (x+3)(x-3).",
-        "Rút gọn phân thức: (x^2-9)/(x+3).",
-        "Cho phương trình 2x + 5 = 0. Tìm nghiệm.",
-        "Một hình thang có đáy lớn 12 cm, đáy nhỏ 8 cm, chiều cao 5 cm. Diện tích bằng bao nhiêu?",
-        "Tìm nghiệm của hệ phương trình: x+y=7, x-y=1.",
-        "Tính chu vi hình tròn có bán kính 7 cm. (Lấy π = 3,14).",
-        "Rút gọn biểu thức: (x^2-4)/(x-2).",
-        "Cho góc ở tâm bằng 60°. Số đo cung tròn chắn góc đó là bao nhiêu độ?",
-        "Một vật thể có thể tích hình lập phương cạnh 4 cm là bao nhiêu?",
-        "Tìm x: x/5 = 12/15."
-      ]
+      "6": ["Viết số tự nhiên nhỏ nhất có ba chữ số khác nhau.","Phân số nào lớn hơn: 3/5 hay 4/7?","Tính giá trị của 36 : 9 + 25.","Một hình chữ nhật có chiều dài 12 cm, chiều rộng 8 cm. Chu vi bằng bao nhiêu?","Viết số thập phân bằng phân số 7/10.","Trong các số 45, 60, 75 số nào chia hết cho 9?","Một hình vuông có cạnh 5 cm. Diện tích bằng bao nhiêu?","Viết hỗn số 3 2/5 dưới dạng phân số.","Trên tia số, điểm nào biểu diễn số 2/3?","Viết ba số nguyên liên tiếp."],
+      "7": ["Giá trị của 2x + 5 khi x = -3 là bao nhiêu?","Tìm nghiệm của phương trình: 3x - 7 = 5.","Một tam giác có các góc 40°, 60°. Góc còn lại bằng bao nhiêu?","Vẽ đồ thị hàm số y = 2x.","Phân tích đa thức x^2 + 5x thành nhân tử.","So sánh hai phân số 5/8 và 7/12.","Một hình bình hành có đáy 10 cm, chiều cao 6 cm. Diện tích bằng bao nhiêu?","Tìm x: 2(x-3) = 10.","Cho tỉ lệ thức 3/x = 9/12. Tìm x.","Số đối của số -15 là bao nhiêu?"],
+      "8": ["Tính giá trị của biểu thức: (x+3)(x-3).","Rút gọn phân thức: (x^2-9)/(x+3).","Cho phương trình 2x + 5 = 0. Tìm nghiệm.","Một hình thang có đáy lớn 12 cm, đáy nhỏ 8 cm, chiều cao 5 cm. Diện tích bằng bao nhiêu?","Tìm nghiệm của hệ phương trình: x+y=7, x-y=1.","Tính chu vi hình tròn có bán kính 7 cm. (Lấy π = 3,14).","Rút gọn biểu thức: (x^2-4)/(x-2).","Cho góc ở tâm bằng 60°. Số đo cung tròn chắn góc đó là bao nhiêu độ?","Một vật thể có thể tích hình lập phương cạnh 4 cm là bao nhiêu?","Tìm x: x/5 = 12/15."]
     };
 
     let currentStep = 1;
     let totalStudents = 0;
     let students = [];
     let currentClass = null;
-    let segments = [];
-    let colors = [];
-    let startAngle = 0;
-    let arc = 0;
-    let spinSpeed = 0;
-    let spinning = false;
+    let segments = [], colors = [];
+    let startAngle = 0, arc = 0, spinSpeed = 0, spinning = false;
 
     const canvas = document.getElementById("wheelCanvas");
     const ctx = canvas.getContext("2d");
@@ -157,6 +123,12 @@
           document.getElementById("step1").classList.add("active");
         }
       }
+    }
+
+    function prevStep() {
+      document.getElementById(`step${currentStep}`).classList.remove("active");
+      currentStep = currentStep > 1 ? currentStep - 1 : 1;
+      document.getElementById(`step${currentStep}`).classList.add("active");
     }
 
     function generateStudents() {
@@ -198,7 +170,6 @@
       renderStudentList();
     }
 
-    // ===== Vòng quay Toán =====
     function setupWheel() {
       document.getElementById("classTitle").innerText = currentClass;
       segments = mathQuestions[currentClass];
@@ -217,12 +188,9 @@
         ctx.arc(250, 250, 250, angle, angle + arc);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.strokeStyle = "white"; ctx.lineWidth = 2; ctx.stroke();
         ctx.save();
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 14px Segoe UI";
+        ctx.fillStyle = "#fff"; ctx.font = "bold 14px Segoe UI";
         ctx.translate(250 + Math.cos(angle + arc / 2) * 150, 250 + Math.sin(angle + arc / 2) * 150);
         ctx.rotate(angle + arc / 2 + Math.PI / 2);
         let text = segments[i];
